@@ -1,6 +1,7 @@
 #ifndef _WSA_WRAPPER_H_INCLUDED_
 #define _WSA_WRAPPER_H_INCLUDED_
 
+#include <string>
 #include <winsock2.h>
 
 namespace my

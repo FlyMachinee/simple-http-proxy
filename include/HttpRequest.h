@@ -1,7 +1,6 @@
 #ifndef _HTTP_REQUEST_H_INCLUDED_
 #define _HTTP_REQUEST_H_INCLUDED_
 
-#include <cstring>
 #include <map>
 #include <string>
 
@@ -17,8 +16,10 @@ namespace my
 
         HttpRequest() = default;
         HttpRequest(const char *http_data, int size);
+        ~HttpRequest() = default;
 
         ::std::pair<::std::string, unsigned short> get_host_port() const;
+        ::std::string to_string() const;
     };
 } // namespace my
 

@@ -64,6 +64,7 @@ bool ::my::cleanup_wsa()
     wsa_initialized = false;
     return true;
 }
+
 SOCKET my::connect_to_server(const char *s_ip, unsigned short s_port)
 {
     SOCKET s_sock = socket(AF_INET, SOCK_STREAM, 0);
@@ -83,6 +84,7 @@ SOCKET my::connect_to_server(const char *s_ip, unsigned short s_port)
 
     return s_sock;
 }
+
 const char *my::get_ip_str(const char *host)
 {
     hostent *host_info = gethostbyname(host);

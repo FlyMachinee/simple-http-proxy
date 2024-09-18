@@ -1,5 +1,7 @@
 #include "../include/HttpRequest.h"
 
+#include <cstring>
+
 ::my::HttpRequest::HttpRequest(const char *http_data, int size)
 {
     const char *line_start = http_data;
@@ -55,4 +57,13 @@
     }
 
     return {host, port};
+}
+::std::string my::HttpRequest::to_string() const
+{
+    ::std::string str = this->method + " " + this->url + " " + this->version + "\r\n";
+    for (const auto &[key, value] : this->headers) {
+        str += key + ": " + value + "\r\n";
+    }
+    str += "\r\n" + this->body;
+    return str;
 }
