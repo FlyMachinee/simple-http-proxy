@@ -18,7 +18,7 @@ void ::my::out_http_data(int indent, const char *data, int size)
     if (isspace(*line_start)) {
         return;
     } else {
-        out(0, "");
+        out("");
         out(indent, "...(total {} bytes)", size);
     }
 }

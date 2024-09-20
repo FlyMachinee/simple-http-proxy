@@ -5,8 +5,12 @@
 #include <iostream>
 #include <string_view>
 
+#include <mutex>
+
 namespace my
 {
+    inline ::std::mutex __log_mutex;
+
     template <typename... Args>
     inline void format_log(
         ::std::ostream &os,
@@ -15,6 +19,7 @@ namespace my
         ::std::string_view format,
         Args &&...args)
     {
+        ::std::lock_guard<::std::mutex> lock(__log_mutex);
         os << ::std::string(leading_space, ' ') << ps << ::std::vformat(format, ::std::make_format_args(args...)) << '\n';
     }
 
@@ -22,6 +27,12 @@ namespace my
     inline void out(int leading_space, ::std::string_view format, Args &&...args)
     {
         format_log(::std::cout, leading_space, "", format, ::std::forward<Args>(args)...);
+    }
+
+    template <typename... Args>
+    inline void out(::std::string_view format, Args &&...args)
+    {
+        format_log(::std::cout, 0, "", format, ::std::forward<Args>(args)...);
     }
 
     template <typename... Args>

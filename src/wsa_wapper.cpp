@@ -1,7 +1,6 @@
 #include "../include/wsa_wapper.h"
 #include "../include/format_log.hpp"
 #include <format>
-#include <winsock2.h>
 
 bool ::my::wsa_initialized = false;
 
@@ -93,4 +92,15 @@ const char *my::get_ip_str(const char *host)
     }
 
     return inet_ntoa(*reinterpret_cast<IN_ADDR *>(host_info->h_addr));
+}
+
+int my::recv_with_timeout(SOCKET s, char *buffer, int buf_size, TIMEVAL timeout)
+{
+    fd_set readfds;
+    FD_ZERO(&readfds);
+    FD_SET(s, &readfds);
+    if (select(0, &readfds, nullptr, nullptr, &timeout) == 0) {
+        throw ::std::runtime_error("Timeout(1s) when receiving data from server");
+    }
+    return recv(s, buffer, buf_size, 0);
 }

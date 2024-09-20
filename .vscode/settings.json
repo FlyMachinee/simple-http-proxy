@@ -63,7 +63,8 @@
     "condition_variable": "cpp",
     "list": "cpp",
     "fstream": "cpp",
-    "mutex": "cpp"
+    "mutex": "cpp",
+    "future": "cpp"
   },
   "C_Cpp.clang_format_style": "{ BasedOnStyle: LLVM, UseTab: Never, IndentWidth: 4, TabWidth: 4, BreakBeforeBraces: Linux, AllowShortIfStatementsOnASingleLine: true, IndentCaseLabels: false, ColumnLimit: 0, AccessModifierOffset: -4, NamespaceIndentation: All, FixNamespaceComments: false }",
   "makefile.launchConfigurations": [

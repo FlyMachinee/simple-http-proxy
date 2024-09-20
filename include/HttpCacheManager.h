@@ -29,6 +29,11 @@ namespace my
 
         static ::std::string get_key(::std::string_view url);
 
+        HttpCacheManager(const HttpCacheManager &) = delete;
+        HttpCacheManager &operator=(const HttpCacheManager &) = delete;
+        HttpCacheManager(HttpCacheManager &&) = delete;
+        HttpCacheManager &operator=(HttpCacheManager &&) = delete;
+
     private:
         ::std::string cache_dir_;
         ::std::string cache_time_map_filename_;
