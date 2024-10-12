@@ -3,6 +3,7 @@
 
 #include <cstring>
 
+// 输出 HTTP 数据的函数
 void ::my::out_http_data(int indent, const char *data, int size)
 {
     const char *line_start = data;

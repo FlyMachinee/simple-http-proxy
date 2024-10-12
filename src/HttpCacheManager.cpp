@@ -6,6 +6,7 @@
 #include <iomanip>
 #include <sstream>
 
+// 构造函数，初始化缓存管理器
 my::HttpCacheManager::HttpCacheManager(::std::string_view cache_dir) : cache_dir_(cache_dir)
 {
     cache_time_map_filename_ = cache_dir_ + "\\cache_time_map";
@@ -13,6 +14,7 @@ my::HttpCacheManager::HttpCacheManager(::std::string_view cache_dir) : cache_dir
         ::std::filesystem::create_directory(cache_dir_);
     }
 
+    // 从缓存时间映射文件中读取缓存时间和 ETag
     ::std::ifstream ifs(cache_time_map_filename_);
     if (ifs.is_open()) {
         ::std::string key, time, etag, line;
@@ -31,6 +33,7 @@ my::HttpCacheManager::HttpCacheManager(::std::string_view cache_dir) : cache_dir
     }
 }
 
+// 析构函数，保存缓存时间和 ETag 到文件
 my::HttpCacheManager::~HttpCacheManager()
 {
     ::std::ofstream ofs(cache_time_map_filename_);
@@ -46,12 +49,14 @@ my::HttpCacheManager::~HttpCacheManager()
     ofs.close();
 }
 
+// 检查指定 URL 是否有缓存
 bool my::HttpCacheManager::has_cache(::std::string_view url) const
 {
     ::std::lock_guard<::std::mutex> lock(cache_mutex_);
     return cache_time_map_.contains(get_key(url));
 }
 
+// 读取指定 URL 的缓存数据
 int my::HttpCacheManager::read_cache(::std::string_view url, char *buffer, int buf_size, int start) const
 {
     ::std::lock_guard<::std::mutex> lock(cache_mutex_);
@@ -70,6 +75,7 @@ int my::HttpCacheManager::read_cache(::std::string_view url, char *buffer, int b
     }
 }
 
+// 追加数据到指定 URL 的缓存
 void my::HttpCacheManager::append_cache(::std::string_view url, const char *data, int data_size)
 {
     ::std::lock_guard<::std::mutex> lock(cache_mutex_);
@@ -83,6 +89,7 @@ void my::HttpCacheManager::append_cache(::std::string_view url, const char *data
     ofs.close();
 }
 
+// 创建指定 URL 的缓存
 void my::HttpCacheManager::create_cache(::std::string_view url)
 {
     ::std::lock_guard<::std::mutex> lock(cache_mutex_);
@@ -95,6 +102,7 @@ void my::HttpCacheManager::create_cache(::std::string_view url)
     ofs.close();
 }
 
+// 更新指定 URL 的缓存时间
 bool my::HttpCacheManager::update_cache_time(::std::string_view url)
 {
     ::std::unique_lock<::std::mutex> lock(cache_mutex_);
@@ -134,6 +142,7 @@ bool my::HttpCacheManager::update_cache_time(::std::string_view url)
     return false;
 }
 
+// 移除指定 URL 的缓存
 void my::HttpCacheManager::remove_cache(::std::string_view url)
 {
     ::std::lock_guard<::std::mutex> lock(cache_mutex_);
@@ -143,18 +152,21 @@ void my::HttpCacheManager::remove_cache(::std::string_view url)
     cache_etag_map_.erase(key);
 }
 
+// 获取指定 URL 的最后修改时间
 ::std::string my::HttpCacheManager::get_modified_time(::std::string_view url) const
 {
     ::std::lock_guard<::std::mutex> lock(cache_mutex_);
     return cache_time_map_.at(get_key(url));
 }
 
+// 获取指定 URL 的 ETag
 ::std::string my::HttpCacheManager::get_etag(::std::string_view url) const
 {
     ::std::lock_guard<::std::mutex> lock(cache_mutex_);
     return cache_etag_map_.at(get_key(url));
 }
 
+// 获取指定 URL 的缓存键
 ::std::string my::HttpCacheManager::get_key(::std::string_view url)
 {
     ::std::string host, path;
